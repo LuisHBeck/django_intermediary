@@ -1,0 +1,30 @@
+{% load bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+    {% bootstrap_css %}
+</head>
+<body>
+    <div class="container">
+        <h1>Contact</h1>
+        {% comment %} getting the context messages (success or error){% endcomment %}
+        {% bootstrap_messages %} 
+
+        <form action="{% url 'contact' %}" method="post" class="form" autocomplete="off">
+            {% csrf_token %}
+
+            {% bootstrap_form form  %}
+
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">Send message</button>
+            {% endbuttons %}
+        </form>
+    </div>
+
+    {% bootstrap_javascript %}
+</body>
+</html>
