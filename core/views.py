@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib import messages #add messages to the page context
 
-from .forms import ContactForm
+from .forms import ContactForm, ProductModelForm
 
 
 def index(request):
@@ -43,6 +43,29 @@ def contact(request):
 
 
 def product(request):
+    
+    if str(request.method) == 'POST':
+        form = ProductModelForm(request.POST, request.FILES)
+        
+        if form.is_valid():
+            prod = form.save(commit=False)
+            
+            print(f'Name:{prod.name}, Price:{prod.price}, Stock:{prod.stock}, Image:{prod.image}')
+            
+            messages.success(request, "Saved successfully")
+            form = ProductModelForm()
+            
+        else:
+            messages.error(request, "ERROR saving")
+            form = ProductModelForm()
+    else:
+        form = ProductModelForm()
+        
+    context = {
+        'form':form
+    }
+    
     return render(request, 
-                  'product.html'
+                  'product.html',
+                  context=context,
                 )

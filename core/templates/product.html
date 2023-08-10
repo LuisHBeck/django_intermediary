@@ -1,11 +1,29 @@
+{% load bootstrap5 %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product</title>
+    {% bootstrap_css %}
 </head>
 <body>
-    <h1>Product</h1>
+    <div class="container">
+        <h1>PRODUCTS</h1><br>
+
+        {% bootstrap_messages %}
+        <form action="{% url 'product' %}" method="post" class="form" autocomplete="off" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {% bootstrap_form form %}
+
+            {% buttons %}
+                <button type="submit" class="btn btn-primary">Register</button>
+            {% endbuttons %}
+        </form>
+    </div>
+
+    {% bootstrap_javascript %}
 </body>
 </html>
