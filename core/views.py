@@ -1,12 +1,17 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib import messages #add messages to the page context
 
 from .forms import ContactForm, ProductModelForm
+from .models import Product
 
 
 def index(request):
+    context = {
+        'products': Product.objects.all()
+    }
     return render(request, 
-                  'index.html'
+                  'index.html',
+                  context=context,
                 )
 
 
@@ -48,9 +53,10 @@ def product(request):
         form = ProductModelForm(request.POST, request.FILES)
         
         if form.is_valid():
-            prod = form.save(commit=False)
+            # prod = form.save(commit=False)
+            # print(f'Name:{prod.name}, Price:{prod.price}, Stock:{prod.stock}, Image:{prod.image}')
             
-            print(f'Name:{prod.name}, Price:{prod.price}, Stock:{prod.stock}, Image:{prod.image}')
+            form.save()
             
             messages.success(request, "Saved successfully")
             form = ProductModelForm()
@@ -69,3 +75,13 @@ def product(request):
                   'product.html',
                   context=context,
                 )
+    
+    
+def product_img(request, pk):
+    prod = get_object_or_404(Product, id=pk)
+    
+    context = {
+        'image': prod.image
+    }
+    
+    return render(request, 'image.html', context)

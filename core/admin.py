@@ -4,7 +4,9 @@ from .models import Product
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'price', 'stock', 'slug', 'creation', 'active']
+    list_display = ['id', 'name', 'price', 'stock', 'slug', 'creation', 'active']
+    list_editable = ['name']
+    list_display_links = ['id']
     
     class Meta:
         verbose_name = 'Product'

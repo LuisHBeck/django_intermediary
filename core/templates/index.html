@@ -1,11 +1,45 @@
+{% load bootstrap5 %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
+    {% bootstrap_css %}
+    <link rel="stylesheet" href="{% static 'style/style.css' %}">
 </head>
 <body>
-    <h1>Index</h1>
+    <div class="container">
+        <h1>Products</h1>
+
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prod in products %}
+                    <tr>
+                        <td scope="row">{{ prod.id }}</td>
+                        <td scope="row">
+                            <a href="{% url 'product_img' prod.pk %}">
+                                {{ prod.name }}
+                            </a>
+                        </td>
+                        <td scope="row">{{ prod.price }}</td>
+                        <td scope="row">{{ prod.stock }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+    {% bootstrap_javascript %}
 </body>
 </html>
