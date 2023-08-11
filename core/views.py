@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages #add messages to the page context
 
 from .forms import ContactForm, ProductModelForm
@@ -48,33 +48,39 @@ def contact(request):
 
 
 def product(request):
-    
-    if str(request.method) == 'POST':
-        form = ProductModelForm(request.POST, request.FILES)
-        
-        if form.is_valid():
-            # prod = form.save(commit=False)
-            # print(f'Name:{prod.name}, Price:{prod.price}, Stock:{prod.stock}, Image:{prod.image}')
+    if not request.user.is_anonymous:
+        if str(request.method) == 'POST':
+            form = ProductModelForm(request.POST, request.FILES)
             
-            form.save()
-            
-            messages.success(request, "Saved successfully")
-            form = ProductModelForm()
-            
+            if form.is_valid():
+                # prod = form.save(commit=False)
+                # print(f'Name:{prod.name}, Price:{prod.price}, Stock:{prod.stock}, Image:{prod.image}')
+                
+                form.save()
+                
+                messages.success(request, "Saved successfully")
+                form = ProductModelForm()
+                
+            else:
+                messages.error(request, "ERROR saving")
+                form = ProductModelForm()
         else:
-            messages.error(request, "ERROR saving")
             form = ProductModelForm()
-    else:
-        form = ProductModelForm()
+            
+        context = {
+            'form':form
+        }
         
-    context = {
-        'form':form
-    }
-    
-    return render(request, 
-                  'product.html',
-                  context=context,
-                )
+        return render(
+            request, 
+            'product.html',
+            context=context,
+            )
+        
+    else: 
+        return redirect(
+            'index'
+        )
     
     
 def product_img(request, pk):
